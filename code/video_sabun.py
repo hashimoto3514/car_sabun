@@ -1,12 +1,13 @@
 import cv2
 import numpy as np
+import time
 
-#2値化
-def binarization(img,th):
-    img[img < th] = 0#二値化処理
-    img[img >= th] = 255#二値化処理
+def binary_threshold(image, threshold_value):
 
-    return img
+    # 二値化処理
+    _, binary_image = cv2.threshold(image, threshold_value, 255, cv2.THRESH_BINARY)
+
+    return binary_image
 
 # 差分を数値化
 def getDiff(img1, img2):
@@ -17,29 +18,29 @@ def getDiff(img1, img2):
     mask = cv2.absdiff(img1, img2)
     # ２値化
     th = 10
-    mask = binarization(mask,th)
+    mask = binary_threshold(mask,th)
 
-    kernel = np.ones((7, 7), np.uint8)
+    kernel = np.ones((3, 3), np.uint8)
     mask = cv2.dilate(mask, kernel)      #膨張処理
     mask = cv2.erode(mask, kernel)  #収縮処理
 
     return cv2.countNonZero(mask),mask # 白の要素数
 
-def calc(tate:int,):
-    a = 1
-
+'''
 #動画ファイルの読み込み
-cap = cv2.VideoCapture("C:\opencv_python\\road_coad\car_road_trim.mp4")
+cap = cv2.VideoCapture("C:\opencv_python\\road_sabun\\road_image\car_2_trim.mp4")
 
-span = 80  # 静止間隔
+span = 50  # 静止間隔
 threshold = 1000 # 変化の敷居値
 
 # 最初のフレームを背景画像に設定
 ret, previous = cap.read()
 ret2,haikei = cap.read()
+cv2.imwrite(f'C:\opencv_python\\road_sabun\\road_image\output2\haikei.jpg',haikei)
 counter=0
 frame_num = 0
 
+time.sleep(2)
 
 while(cap.isOpened()):
     # フレームの取得
@@ -56,7 +57,7 @@ while(cap.isOpened()):
     else:
         counter=0
 
-    print("diff:{} counter:{}".format(diff,counter))
+    #print("diff:{} counter:{}".format(diff,counter))
 
     # 一定以下の変化量が、一定時間続いたら描画する
     if(span < counter):
@@ -66,7 +67,7 @@ while(cap.isOpened()):
         
         diff2,mask2 = getDiff(haikei,frame)
         if diff2 > 15000:
-            cv2.imwrite(f'C:\opencv_python\\road_coad\\output\\out_{frame_num}.jpg',frame)
+            cv2.imwrite(f'C:\opencv_python\\road_sabun\\road_image\output2\out_{frame_num}.jpg',frame)
 
 
     
@@ -85,11 +86,11 @@ cap.release()
 cv2.destroyAllWindows()
 
 '''
-img_1 = cv2.imread('C:\opencv_python\\road_coad\haikei.png')
-img_2 = cv2.imread('C:\opencv_python\\road_coad\car.png')
+img_1 = cv2.imread('C:\opencv_python\\road_sabun\\road_image\output2\haikei.jpg')
+img_2 = cv2.imread('C:\opencv_python\\road_sabun\\road_image\output2\out_1280.jpg')
 
 diff ,mask = getDiff(img_1,img_2)
+cv2.imwrite(f'C:\opencv_python\\road_sabun\\road_image\output2\mask\mask1280.jpg',mask)
 cv2.imshow("mask",mask)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-'''

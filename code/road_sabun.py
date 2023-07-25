@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-img_1 = cv2.imread('C:\opencv_python\\road_coad\haikei.png')
+img_1 = cv2.imread('C:\opencv_python\\road_sabun\\road_image\output\haikei.png')
 img_2 = cv2.imread('C:\opencv_python\\road_coad\car2.png')
 car_gray = cv2.cvtColor(img_2, cv2.COLOR_BGR2GRAY)
 haikei_gray = cv2.cvtColor(img_1, cv2.COLOR_BGR2GRAY)
